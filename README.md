@@ -8,7 +8,7 @@ If you like MIDI, check out my project Grandbot: https://github.com/handeyeco/Gr
 
 Hey 👋 My name is Matthew and I don't understand analog circuits.
 
-Boy have I tried though. Just looking around my desk I can see my copy of There Are No Elections by Amdahl, Practical Electronics For Inventors by Scherz, and Electronic Projects For Musicians by Anderton. My degree is in Music Business, Performance, and Technology and I've worked TWO jobs assembling modular synthesizers - one before and one after my career as an audio engineer, before I made the switch to software development.
+Boy have I tried though. Just looking around my desk I can see my copy of There Are No Electrons by Amdahl, Practical Electronics For Inventors by Scherz, and Electronic Projects For Musicians by Anderton. My degree is in Music Business, Performance, and Technology and I've worked TWO jobs assembling modular synthesizers - one before and one after my career as an audio engineer, before I made the switch to software development.
 
 Circuits are hard. I discovered something though - on my 100th attempt at learning electrical engineering - that there's buckets of fun to be had with a relatively simple circuit and some basic programming skills.
 
@@ -70,7 +70,7 @@ void setup() {
   // setup for printing to our monitor
   Serial.begin(9600);
 
-  // the switches us the built-in pull-up resistors
+  // the switches use the built-in pull-up resistors
   pinMode(S3_PIN, INPUT_PULLUP);
   pinMode(S4_PIN, INPUT_PULLUP);
   pinMode(S5_PIN, INPUT_PULLUP);
