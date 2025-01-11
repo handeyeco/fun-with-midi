@@ -365,7 +365,7 @@ The fun thing about this circuit is that you don't have to control just one thin
 
 - Traditional MIDI CC lets you control 127 parameters
 - MIDI NRPN lets you control 16,383 parameters
-- Thanks to MIDI channels, you can simultaneous control up to 16 devices
+- Thanks to MIDI channels, you can simultaneously control up to 16 devices
 
 We're not just limited to parameter changes either, with MIDI you can:
 
