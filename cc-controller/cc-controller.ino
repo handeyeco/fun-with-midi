@@ -43,6 +43,7 @@ void loop() {
   // RV2 adjusts the CC value
   if (RV2_READ != RV2_STATE) {
     RV2_STATE = RV2_READ;
+    // sendControlChange(CC, value, channel)
     MIDI.sendControlChange(RV1_STATE, RV2_STATE, MIDI_CH);
   }
 }

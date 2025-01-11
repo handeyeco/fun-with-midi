@@ -31,7 +31,7 @@ byte RV1_edit_mode = 0;
 int offset = 0;
 int depth = 127;
 
-// filter cutoff on NTS-1
+// 74 is commonly the CC for filter cutoff
 byte cc = 74;
 
 int MIN_SPEED = 60;
@@ -79,34 +79,41 @@ void loop() {
   int RV1_READ = read_and_map(RV1_PIN);
   int RV2_READ = read_and_map(RV2_PIN);
 
-  // print and update state if change detected
+  byte old_RV1_edit_mode = RV1_edit_mode;
+
+  // update edit state if button change detected
   if (S3_READ != S3_STATE) {
     S3_STATE = S3_READ;
     // set RV1_edit_mode to offset
-    if (!S3_STATE) {
+    if (S3_STATE == LOW) {
       RV1_edit_mode = 0;
-      digitalWrite(GRN_LED_PIN, HIGH);
-      digitalWrite(RED_LED_PIN, HIGH);
     }
   }
+
   if (S4_READ != S4_STATE) {
     S4_STATE = S4_READ;
     // set RV1_edit_mode to depth
-    if (!S4_STATE) {
+    if (S4_STATE == LOW) {
       RV1_edit_mode = 1;
-      digitalWrite(GRN_LED_PIN, LOW);
-      digitalWrite(RED_LED_PIN, HIGH);
     }
   }
+
   if (S5_READ != S5_STATE) {
     S5_STATE = S5_READ;
     // set RV1_edit_mode to offset
-    if (!S5_STATE) {
+    if (S5_STATE == LOW) {
       RV1_edit_mode = 2;
-      digitalWrite(GRN_LED_PIN, HIGH);
-      digitalWrite(RED_LED_PIN, LOW);
     }
   }
+
+  // watch for changes to edit mode and update LEDs
+  if (old_RV1_edit_mode != RV1_edit_mode) {
+      digitalWrite(GRN_LED_PIN, RV1_edit_mode != 1);
+      digitalWrite(RED_LED_PIN, RV1_edit_mode != 2);
+  }
+
+  // if RV1 changes, look at the edit mode
+  // to determine which setting should be updated
   if (RV1_READ != RV1_STATE) {
     RV1_STATE = RV1_READ;
     if (RV1_edit_mode == 0) {
@@ -117,16 +124,25 @@ void loop() {
       cc = RV1_STATE;
     }
   }
+
+  // use RV2 to update the speed of the interval
   if (RV2_READ != RV2_STATE) {
     RV2_STATE = RV2_READ;
+    // we map pot reads from 0-1023 to 0-127 for MIDI
+    // but now we're mapping 0-127 to MIN/MAX_SPEED
     speed = map(RV2_STATE, 0, 127, MIN_SPEED, MAX_SPEED);
   }
 
+  // 1. check the current time
+  // 2. compare it to the last time we sent a message
+  // 3. if we're past our interval, send a new message
   unsigned long now = millis();
   if (now - last_cc_sent > speed) {
     last_cc_sent = now;
+    // max is offset + depth, as long as it's between 0 and 127
     int max_val = constrain(offset + depth, 0, 127);
     int rand_val = random(offset, max_val);
+    // sendControlChange(CC, value, channel)
     MIDI.sendControlChange(cc, rand_val, MIDI_CH);
   }
 }
