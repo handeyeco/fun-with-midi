@@ -16,7 +16,7 @@ In this article I'm going to talk a little about MIDI.
 
 ## What I'm using
 
-For these examples I'm using an Arduino (~$50) and the Sparkfun MIDI Shield (~$24). If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
+For these examples I'm using an Arduino ($50) and the Sparkfun MIDI Shield ($24). If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
 
 ## The circuit
 
@@ -37,7 +37,7 @@ Source: https://github.com/handeyeco/fun-with-midi/blob/main/board-test/board-te
 
 This first sketch is just testing the pots, buttons, and LEDs. First we let the program know which pins to find everything:
 
-``` Arduino
+``` C++
 // button pins (digital)
 byte S3_PIN = 4;
 byte S4_PIN = 3;
@@ -54,7 +54,7 @@ byte RED_LED_PIN = 7;
 
 Then we declare some state so we can keep track of what everything is doing as the sketch runs:
 
-``` Arduino
+``` C++
 // declare read state
 bool S3_STATE = 1;
 bool S4_STATE = 1;
@@ -65,7 +65,7 @@ int RV2_STATE = 0;
 
 `setup` is the code that runs at the beginning of the sketch:
 
-``` Arduino
+``` C++
 void setup() {
   // setup for printing to our monitor
   Serial.begin(9600);
@@ -95,7 +95,7 @@ void setup() {
 
 `loop` runs over and over again so we can watch for changes:
 
-``` Arduino
+``` C++
 // pot change threshold,
 // for what we consider a change
 int RV_THRESH = 3;
@@ -161,7 +161,7 @@ The code is much more concise as it takes the code from the last example and cut
 
 First we import FortySevenEffects' MIDI library (https://github.com/FortySevenEffects/arduino_midi_library) and initialize it:
 
-``` Arduino
+``` C++
 #include <MIDI.h>
 
 MIDI_CREATE_DEFAULT_INSTANCE();
@@ -169,7 +169,7 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 
 We set pins and initalize state like before; this time though we also have to start the MIDI library. Additionally I've added a helper function to map 0-1023 (the full range that an Arduino's `analogRead` can supply) to 0-127 (the full range that MIDI can use).
 
-``` Arduino
+``` C++
 // pot pins
 byte RV1_PIN = A1;
 byte RV2_PIN = A0;
@@ -198,7 +198,7 @@ void setup() {
 
 Now the juicy bit:
 
-``` Arduino
+``` C++
 // there are 16 MIDI channels,
 // I just used the first one
 byte MIDI_CH = 1;
@@ -257,7 +257,7 @@ But we can narrow that range using offset and depth:
 
 This code shares a lot from the first two examples, so I'm just going to talk about the important changes. First we initialize some state:
 
-``` Arduino
+``` C++
 // what editing mode we're in:
 // 0 = offset (no LEDs)
 // 1 = depth (green LED)
@@ -283,7 +283,7 @@ unsigned long last_cc_sent = 0;
 
 Next we check each button to see if they have been pressed and if we detect a change we update the mode we're in, for example:
 
-``` Arduino
+``` C++
   byte old_RV1_edit_mode = RV1_edit_mode;
 
   // update edit state if button change detected
@@ -306,7 +306,7 @@ Next we check each button to see if they have been pressed and if we detect a ch
 
 Then we read the pots. For RV1, we update the settings based on what mode we're in. For RV2, we map the read value between our min/max interval speed:
 
-``` Arduino
+``` C++
   // if RV1 changes, look at the edit mode
   // to determine which setting should be updated
   if (RV1_READ != RV1_STATE) {
@@ -331,7 +331,7 @@ Then we read the pots. For RV1, we update the settings based on what mode we're 
 
 Finally we continuously check to see if the current timestamp minus the timestamp for the last message is larger than our interval; if so, send a new message:
 
-``` Arduino
+``` C++
   // 1. check the current time
   // 2. compare it to the last time we sent a message
   // 3. if we're past our interval, send a new message
