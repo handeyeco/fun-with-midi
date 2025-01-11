@@ -16,7 +16,7 @@ In this article I'm going to talk a little about MIDI.
 
 ## What I'm using
 
-For these examples I'm using an Arduino ($50) and the Sparkfun MIDI Shield ($24). If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
+For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
 
 ## The circuit
 
