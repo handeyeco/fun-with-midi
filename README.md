@@ -14,9 +14,21 @@ Circuits are hard. I discovered something though - on my 100th attempt at learni
 
 In this article I'm going to talk a little about MIDI.
 
+## What we're doing
+
+We're going to use an Arduino and a simple MIDI out circuit for three sketches:
+
+1. To get things started, we'll run a sketch that makes sure all the buttons, potentiometers, and LEDs are working.
+2. Then we'll test our MIDI out circuit by making a vanilla MIDI CC controller that lets us pick a MIDI CC and a value for that CC.
+3. Finally we'll look at a more creative application of MIDI by making a random MIDI CC generator that can be used to turn boring synth patches into modular-like bleeps and bloops.
+
+Each sketch will build on the previous sketch so hopefully by then end you can take these ideas and build your own weird MIDI tool!
+
 ## What I'm using
 
-For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
+For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). Arduino is designed to be a beginner-friendly platform for people just getting into microcontrollers and shields are just circuits that are meant to extend the functionality of another circuit.
+
+If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
 
 ## The circuit
 
