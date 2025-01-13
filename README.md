@@ -14,6 +14,12 @@ Circuits are hard. I discovered something though - on my 100th attempt at learni
 
 In this article I'm going to talk a little about MIDI.
 
+## WARNING
+
+Your hearing is fragile, be sure to protect it when programmatically adjusting audio. I recommend getting some cheap, small speakers from a thrift store to use while debugging. Always start each iteration with your volume turned down and carefully turn the volume up when you're confident your project is working.
+
+You can always fix bugs, but you can't fix tinnitus!
+
 ## What we're doing
 
 We're going to use an Arduino and a simple MIDI out circuit for three sketches:
@@ -170,6 +176,7 @@ So:
 
 1. We won't use `Serial.print` while also using MIDI
 2. If we have something plugged into MIDI in, we'll use the prog/run switch to disconnect it while programming our Arduino
+3. If in the future we design our own circuits, we'll use a microcontroller with multiple UARTS so MIDI can be on its own
 
 ## Sketch #2: MIDI CC Controller
 
@@ -181,7 +188,7 @@ This script will give us the power to change parameters on a remote device from 
 
 The code is much more concise as it takes the code from the last example and cuts a lot away from it. We're only going to use the pots here:
 
-- One pot will control which CC to control. For instance on the Hydrasynth, filter 1 cutoff is MIDI CC 74 and LFO 1 rate is MIDI CC 72.
+- One pot will control which CC to control. For instance on the Hydrasynth, filter 1 cutoff is MIDI CC 74 and LFO 1 rate is MIDI CC 72. Your synth's manual should tell you what CC controls what parameter.
 - The other pot will control the value of the MIDI CC. Most of MIDI works with 7 bits which gives us a range between 0 and 127 (128 steps).
 
 First we import FortySevenEffects' MIDI library (https://github.com/FortySevenEffects/arduino_midi_library) and initialize it:
