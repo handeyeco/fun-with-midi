@@ -1,6 +1,6 @@
 # Fun With MIDI
 
-Find my links on h-e.io
+Find my links on https://h-e.io/
 
 If you like MIDI, check out my project Grandbot: https://github.com/handeyeco/Grandbot
 
@@ -26,7 +26,7 @@ Each sketch will build on the previous sketch so hopefully by then end you can t
 
 ## What I'm using
 
-For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). Arduino is designed to be a beginner-friendly platform for people just getting into microcontrollers and shields are just circuits that are meant to extend the functionality of another circuit.
+For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). Arduino is designed to be a beginner-friendly platform for people who are learning about microcontrollers and shields are just circuits that are meant to extend the functionality of another circuit.
 
 If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
 
@@ -47,7 +47,7 @@ If you've been playing with electronics already, there's a good chance you have 
 
 Source: https://github.com/handeyeco/fun-with-midi/blob/main/board-test/board-test.ino
 
-This first sketch is just testing the pots, buttons, and LEDs. First we let the program know which pins to find everything:
+This first sketch is just testing the pots, buttons, and LEDs. First we let the program know which pins we're using for everything:
 
 ``` C++
 // button pins (digital)
@@ -64,7 +64,7 @@ byte GRN_LED_PIN = 6;
 byte RED_LED_PIN = 7;
 ```
 
-Then we declare some state so we can keep track of what everything is doing as the sketch runs:
+Then we declare some variables so we can keep track of what everything is doing as the sketch runs:
 
 ``` C++
 // declare read state
@@ -157,6 +157,19 @@ What it's doing:
 3. If any pots are turned, print in the serial monitor which pot was turned
 
 Okay, not super fun so far, but we hopefully we have a working Arduino connected to a working MIDI shield. Now let's actually _do_ something with the MIDI output.
+
+## Serial, USB, and MIDI
+
+Okay, here's some bummer news: the `Serial` protocol we used to print messages in the previous example doesn't play well with hardware MIDI. The problem is that both USB communication and hardware MIDI rely on UART (connected to the TX/RX pins). This is why the MIDI shield has a prog/run switch: when we're sending our sketch to the Arduino, we can't also be receiving MIDI or our bits will get all mixed up. The switch turns off MIDI in while we program the microcontroller.
+
+This isn't a huge issue for now since we're only using MIDI out, but it's something to keep in mind. It does however limit our ability to use `Serial.print` while also using MIDI.
+
+The good news is that some Arduinos have multiple UARTs; for example the Mega has 4 sets of UART pins. This means you can use one set for programming/debugging and one set for MIDI. Unfortunately the MIDI shield is designed to work with the Uno too, which only has one set, so the issues exists with the shield on the Mega.
+
+So:
+
+1. We won't use `Serial.print` while also using MIDI
+2. If we have something plugged into MIDI in, we'll use the prog/run switch to disconnect it while programming our Arduino
 
 ## Sketch #2: MIDI CC Controller
 
