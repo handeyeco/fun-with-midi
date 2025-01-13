@@ -28,7 +28,7 @@ We're going to use an Arduino and a simple MIDI out circuit for three sketches:
 2. Then we'll test our MIDI out circuit by making a vanilla MIDI CC controller that lets us pick a MIDI CC and a value for that CC.
 3. Finally we'll look at a more creative application of MIDI by making a random MIDI CC generator that can be used to turn boring synth patches into modular-like bleeps and bloops.
 
-Each sketch will build on the previous sketch so hopefully by then end you can take these ideas and build your own weird MIDI tool!
+Each sketch will build on the previous sketch so hopefully by the end you can take these ideas and build your own weird MIDI tool!
 
 ## What I'm using
 
