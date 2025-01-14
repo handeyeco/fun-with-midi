@@ -32,7 +32,7 @@ Each sketch will build on the previous sketch so hopefully by the end you can ta
 
 ## What I'm using
 
-For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). Arduino is designed to be a beginner-friendly platform for people who are learning about microcontrollers and shields are just circuits that are meant to extend the functionality of another circuit.
+For these examples I'm using an Arduino Mega ($50; an Uno should work fine though) and the Sparkfun MIDI Shield ($24). Arduino is designed to be a beginner-friendly platform for people who are learning about microcontrollers. Shields are just circuits that are meant to extend the functionality of another circuit.
 
 If you want to follow along and have the cash, I highly recommend throwing some dough at both Arduino and Sparkfun - they contribute a lot to the DIY scene. However you can get equally far with a $10 Arduino knock-off and some common components.
 
@@ -47,7 +47,7 @@ Even though MIDI in makes everything more fun, for the sake of simplicity I'm ju
 - Three switches going into digital pins on the Arduino (we'll be using the internal pull-up resistors)
 - Two LEDs with current limiting resistors
 
-If you've been playing with electronics already, there's a good chance you have most of this stuff lying around with the exception of the Arduino and the DIN socket (using a 3.5mm jack for TRS MIDI is also an option).
+If you've been playing with electronics already, there's a good chance you have most of this stuff lying around except maybe the Arduino and the DIN socket (using a 3.5mm jack for TRS MIDI is also an option).
 
 ## Sketch #1: Board Test
 
@@ -159,10 +159,10 @@ void loop() {
 What it's doing:
 
 1. If any buttons are pressed, light up the LEDs
-2. If any buttons are pressed, print in the serial monitor which button was pressed
-3. If any pots are turned, print in the serial monitor which pot was turned
+2. If any button is pressed, print in the serial monitor which button was pressed
+3. If any pot is turned, print in the serial monitor which pot was turned
 
-Okay, not super fun so far, but we hopefully we have a working Arduino connected to a working MIDI shield. Now let's actually _do_ something with the MIDI output.
+Okay, not super fun so far, but hopefully we have a working Arduino connected to a working MIDI shield. Now let's actually _do_ something with the MIDI output.
 
 ## Serial, USB, and MIDI
 
@@ -186,9 +186,9 @@ I'm not going to explain MIDI or MIDI CC in a lot of detail. You have access to 
 
 This script will give us the power to change parameters on a remote device from our Arduino. Imagine being able to change the filter cutoff on your synth from the other side of the room - that _can_ be a reality for you!
 
-The code is much more concise as it takes the code from the last example and cuts a lot away from it. We're only going to use the pots here:
+The code is much more concise as it takes the last example and cuts a lot away from it. We're only going to use the pots here:
 
-- One pot will control which CC to control. For instance on the Hydrasynth, filter 1 cutoff is MIDI CC 74 and LFO 1 rate is MIDI CC 72. Your synth's manual should tell you what CC controls what parameter.
+- One pot will control which CC we're modifying. For instance on the Hydrasynth, filter 1 cutoff is MIDI CC 74 and LFO 1 rate is MIDI CC 72. Your synth's manual should tell you what CC controls what parameter.
 - The other pot will control the value of the MIDI CC. Most of MIDI works with 7 bits which gives us a range between 0 and 127 (128 steps).
 
 First we import FortySevenEffects' MIDI library (https://github.com/FortySevenEffects/arduino_midi_library) and initialize it:
@@ -327,7 +327,7 @@ Next we check each button to see if they have been pressed and if we detect a ch
     }
   }
 
-  // ...same for the other buttons...
+  // ...similar for the other buttons...
 
   // watch for changes to edit mode and update LEDs
   if (old_RV1_edit_mode != RV1_edit_mode) {
