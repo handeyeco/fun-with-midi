@@ -22,6 +22,8 @@ You can always fix bugs, but you can't fix tinnitus!
 
 ## What we're doing
 
+The code for these projects: https://github.com/handeyeco/fun-with-midi
+
 We're going to use an Arduino and a simple MIDI out circuit for three sketches:
 
 1. To get things started, we'll run a sketch that makes sure all the buttons, potentiometers, and LEDs are working.
@@ -55,7 +57,7 @@ Source: https://github.com/handeyeco/fun-with-midi/blob/main/board-test/board-te
 
 This first sketch is just testing the pots, buttons, and LEDs. First we let the program know which pins we're using for everything:
 
-``` C++
+```C++
 // button pins (digital)
 byte S3_PIN = 4;
 byte S4_PIN = 3;
@@ -72,7 +74,7 @@ byte RED_LED_PIN = 7;
 
 Then we declare some variables so we can keep track of what everything is doing as the sketch runs:
 
-``` C++
+```C++
 // declare read state
 bool S3_STATE = 1;
 bool S4_STATE = 1;
@@ -83,7 +85,7 @@ int RV2_STATE = 0;
 
 `setup` is the code that runs at the beginning of the sketch:
 
-``` C++
+```C++
 void setup() {
   // setup for printing to our monitor
   Serial.begin(9600);
@@ -113,7 +115,7 @@ void setup() {
 
 `loop` runs over and over again so we can watch for changes:
 
-``` C++
+```C++
 // pot change threshold,
 // for what we consider a change
 int RV_THRESH = 3;
@@ -126,7 +128,7 @@ void loop() {
   int RV1_READ = analogRead(RV1_PIN);
   int RV2_READ = analogRead(RV2_PIN);
 
-  // if any button is pressed, light LED
+  // if any button is pressed, light LEDs
   bool pressed = S3_READ && S4_READ && S5_READ;
   digitalWrite(GRN_LED_PIN, pressed);
   digitalWrite(RED_LED_PIN, pressed);
@@ -170,7 +172,7 @@ Okay, here's some bummer news: the `Serial` protocol we used to print messages i
 
 This isn't a huge issue for now since we're only using MIDI out, but it's something to keep in mind. It does however limit our ability to use `Serial.print` while also using MIDI.
 
-The good news is that some Arduinos have multiple UARTs; for example the Mega has 4 sets of UART pins. This means you can use one set for programming/debugging and one set for MIDI. Unfortunately the MIDI shield is designed to work with the Uno too, which only has one set, so the issues exists with the shield on the Mega.
+The good news is that some Arduinos have multiple UARTs; for example the Mega has 4 sets of UART pins. This means you can use one set for programming/debugging and one set for MIDI. Unfortunately the MIDI shield is designed to work with the Uno too, which only has one set, so the issues exists with the shield even on the Mega.
 
 So:
 
@@ -193,7 +195,7 @@ The code is much more concise as it takes the last example and cuts a lot away f
 
 First we import FortySevenEffects' MIDI library (https://github.com/FortySevenEffects/arduino_midi_library) and initialize it:
 
-``` C++
+```C++
 #include <MIDI.h>
 
 MIDI_CREATE_DEFAULT_INSTANCE();
@@ -201,7 +203,7 @@ MIDI_CREATE_DEFAULT_INSTANCE();
 
 We set pins and initalize state like before; this time though we also have to start the MIDI library. Additionally I've added a helper function to map 0-1023 (the full range that an Arduino's `analogRead` can supply) to 0-127 (the full range that MIDI can use).
 
-``` C++
+```C++
 // pot pins
 byte RV1_PIN = A1;
 byte RV2_PIN = A0;
@@ -230,7 +232,7 @@ void setup() {
 
 Now the juicy bit:
 
-``` C++
+```C++
 // there are 16 MIDI channels,
 // I just used the first one
 byte MIDI_CH = 1;
@@ -289,7 +291,7 @@ But we can narrow that range using offset and depth:
 
 This code shares a lot from the first two examples, so I'm just going to talk about the important changes. First we initialize some state:
 
-``` C++
+```C++
 // what editing mode we're in:
 // 0 = offset (no LEDs)
 // 1 = depth (green LED)
@@ -315,7 +317,7 @@ unsigned long last_cc_sent = 0;
 
 Next we check each button to see if they have been pressed and if we detect a change we update the mode we're in, for example:
 
-``` C++
+```C++
   byte old_RV1_edit_mode = RV1_edit_mode;
 
   // update edit state if button change detected
@@ -338,7 +340,7 @@ Next we check each button to see if they have been pressed and if we detect a ch
 
 Then we read the pots. For RV1, we update the settings based on what mode we're in. For RV2, we map the read value between our min/max interval speed:
 
-``` C++
+```C++
   // if RV1 changes, look at the edit mode
   // to determine which setting should be updated
   if (RV1_READ != RV1_STATE) {
@@ -363,7 +365,7 @@ Then we read the pots. For RV1, we update the settings based on what mode we're 
 
 Finally we continuously check to see if the current timestamp minus the timestamp for the last message is larger than our interval; if so, send a new message:
 
-``` C++
+```C++
   // 1. check the current time
   // 2. compare it to the last time we sent a message
   // 3. if we're past our interval, send a new message
@@ -387,9 +389,9 @@ Addind MIDI in isn't too much work either, it's just that the MIDI specification
 - R5 is limiting current
 - R6 is a pull-up resistor
 - D3 is protection again reverse polarization
-- The 6N138 is sending the data from two electrically disconnected circuits
+- The 6N138 is sending the data between two electrically disconnected circuits
 
-To have both hardware MIDI in and MIDI out, you're looking at eight cheap and highly available components (not including the Arduino). No vactrols, no germanium transistors, no archaic ICs you have to source from estate sales.
+To have both hardware MIDI in and MIDI out, you're looking at eight cheap and highly available components (not including the Arduino). No vactrols, no germanium transistors, and no archaic ICs you have to source from estate sales.
 
 ## Closing thoughts
 
